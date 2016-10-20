@@ -385,11 +385,11 @@ gulp.task('build', ['ts'], function(){
 ```
 Development Commands
 -------------
-npm install
-bower install
-bower install bootstrap --save
-gulp build
-gulp serve
+- npm install
+- bower install
+- bower install bootstrap --save
+- gulp build
+- gulp serve
 
 ```
 - Troubleshooting
