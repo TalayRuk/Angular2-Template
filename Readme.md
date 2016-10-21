@@ -1,6 +1,37 @@
 # Angular Setup Checklist
-- mkdir the project directory
-- touch index.html in the top level of the project directory.
+
+
+1. mkdir the project directory
+2. touch index.html in the top level of the project directory.
+3. touch package.json file for npm dependencies.
+4. $ bower init to create the bower manifest file, keeping all the defaults.
+5. touch .gitignore file.
+6. mkdir resources folder, including subfolders for :
+    - mkdir resources/images
+    - mkdir resources/styles
+        -touch resources/styles/styles.css ;to make sure the files are connected up correctly 
+           - for example, turn all the <h1> tags blue.
+    - mkdir resources/js. 
+7. mkdir app 
+    - add the root component: touch app/app.component.ts.
+8. add the entry point files: 
+    - touch app/app.module.ts 
+    - touch app/main.ts.
+9. Create the Angular configuration files in the top level of your project directory: 
+    - touch tsconfig.json
+    - touch typings.json
+    - touch systemjs.config.js.
+10. touch gulpfile.js to the top level of your project directory.
+11. Install any bower dependencies, such as Bootstrap. - bower install bootstrap --save
+12. Run the 4 development commands.
+    - Development Commands
+        1.npm install
+        2. bower install
+        3. gulp build
+        4. gulp serve
+
+
+index.html content
 ```
 <html>
   <head>
