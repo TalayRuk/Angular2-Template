@@ -382,7 +382,7 @@ gulp.task('build', ['ts'], function(){
 
 ```
 
-## Finally, don't forget to add your <script and link> tags to the index.html file, before your final app.js file. The TypeScript compiler will give you errors about jQuery but it will work just fine in the browser if we install it with Bower and then build with our gulpfile. This will pull jQuery, and any of our other frontend dependencies, into our vendor.css and vendor.min.js files to be used in the browser.
+## Finally, don't forget to add your script and link tags to the index.html file, before your final app.js file. The TypeScript compiler will give you errors about jQuery but it will work just fine in the browser if we install it with Bower and then build with our gulpfile. This will pull jQuery, and any of our other frontend dependencies, into our vendor.css and vendor.min.js files to be used in the browser.
 
 ### index.html
 
@@ -393,6 +393,7 @@ gulp.task('build', ['ts'], function(){
 ```
 
 ### Notice that Gulp and the TypeScript compiler can both share the same build folder.
+
 
 - Install any bower dependencies, such as Bootstrap.
 - Run the 4 development commands.
