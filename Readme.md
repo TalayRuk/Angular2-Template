@@ -285,17 +285,17 @@ systemjs.config.js
 ```  
 
 - touch gulpfile.js to the top level of your project directory.
+### We can still use npm and gulp to manage our development workflow with a server, and we can still use Bower to manage our frontend dependencies. Here is a sample package.json and gulpfile.js to get you started. 
+**There's no need to worry about concatenating and minifying your JavaScript, the TypeScript compiler takes care of that for us, no need for environment variables at this point, and there's no need to browserify anymore..** 
+_But we do want a simple build task to pull in our Bower dependencies and put them into our usual vendor.css and vendor.min.js files. We also want to have a task to compile any SASS we're using, and a basic serve task. We are using the same tasks from last week._
 ```
 gulpfile.js
 ------------------------------------------------------
 
 ////////////////////// DEPENDENCIES AND VARIABLES //////////////////////
 var gulp = require('gulp');
-
-// used for concatenating/minifying bower files and other js/css
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
-// used for pulling in bower files.
 var lib = require('bower-files')({
   "overrides":{
     "bootstrap" : {
@@ -308,53 +308,18 @@ var lib = require('bower-files')({
   }
 });
 
-// used for build and clean tasks.
-var utilities = require('gulp-util');
-var buildProduction = utilities.env.production;
-var del = require('del');
-
-// set up server with watchers and run typescript compiler in the shell.
 var browserSync = require('browser-sync').create();
-var shell = require('gulp-shell');
-
-// sass dependencies.
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 
-////////////////////// TYPESCRIPT //////////////////////
-// clean task
-gulp.task('tsClean', function(){
-  return del(['app/*.js', 'app/*.js.map']);
-});
-
-// clean and then compile once. To be called from server and global build.
-gulp.task('ts', ['tsClean'], shell.task([
-  'tsc'
-]));
-
-////////////////////// BOWER //////////////////////
-// when adding a new bower depndency:
-// stop the server
-// always use the `bower install --save` flag.
-// run `gulp bower` to build vendor files
-// restart server.
-
-gulp.task('jsBowerClean', function(){
-  return del(['./build/js/vendor.min.js']);
-});
-
-gulp.task('jsBower', ['jsBowerClean'], function() {
+gulp.task('jsBower', function () {
   return gulp.src(lib.ext('js').files)
     .pipe(concat('vendor.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./build/js'));
 });
 
-gulp.task('cssBowerClean', function(){
-  return del(['./build/css/vendor.css']);
-});
-
-gulp.task('cssBower', ['cssBowerClean'], function() {
+gulp.task('cssBower', function () {
   return gulp.src(lib.ext('css').files)
     .pipe(concat('vendor.css'))
     .pipe(gulp.dest('./build/css'));
@@ -362,36 +327,37 @@ gulp.task('cssBower', ['cssBowerClean'], function() {
 
 gulp.task('bower', ['jsBower', 'cssBower']);
 
-////////////////////// SASS //////////////////////
+gulp.task('build', ['bower', 'cssBuild']);
 
-gulp.task('sassBuild', function() {
-  return gulp.src(['resources/styles/*'])
-    .pipe(sourcemaps.init())
-    .pipe(sass())
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('./build/css'));
-});
-
-////////////////////// SERVER //////////////////////
-gulp.task('serve', ['build'], function() {
+gulp.task('serve', function() {
   browserSync.init({
     server: {
       baseDir: "./",
       index: "index.html"
     }
   });
-  gulp.watch(['resources/js/*.js'], ['jsBuild']); // vanilla js changes, reload.
-  gulp.watch(['*.html'], ['htmlBuild']); // html changes, reload.
-  gulp.watch(['resources/styles/*.css', 'resources/styles/*.scss'], ['cssBuild']); // css or sass changes, concatenate all css/sass, build, reload.
-  gulp.watch(['app/*.ts'], ['tsBuild']); // typescript files change, compile then reload.
+
+  gulp.watch(['bower.json'], ['bowerBuild']);
+  gulp.watch(['*.html'], ['htmlBuild']);
+  gulp.watch("scss/*.scss", ['cssBuild']);
+
 });
 
-gulp.task('jsBuild', function(){
+gulp.task('bowerBuild', ['bower'], function(){
   browserSync.reload();
 });
 
 gulp.task('htmlBuild', function(){
   browserSync.reload();
+});
+
+gulp.task('cssBuild', function() {
+  return gulp.src(['scss/*.scss'])
+    .pipe(sourcemaps.init())
+    .pipe(sass())
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('./build/css'))
+    .pipe(browserSync.stream());
 });
 
 gulp.task('cssBuild', ['sassBuild'], function(){
@@ -411,6 +377,17 @@ gulp.task('build', ['ts'], function(){
 });
 
 ```
+
+## Finally, don't forget to add your <script and link> tags to the index.html file, before your final app.js file. The TypeScript compiler will give you errors about jQuery but it will work just fine in the browser if we install it with Bower and then build with our gulpfile. This will pull jQuery, and any of our other frontend dependencies, into our vendor.css and vendor.min.js files to be used in the browser.
+
+### index.html
+```
+    <link rel="stylesheet" href="build/css/vendor.css">
+    <script src="build/js/vendor.min.js"></script>
+    <script type="text/javascript" src="build/js/app.js"></script>
+```
+### Notice that Gulp and the TypeScript compiler can both share the same build folder.
+
 - Install any bower dependencies, such as Bootstrap.
 - Run the 4 development commands.
 ```
