@@ -113,7 +113,7 @@ typings/
 
 ```
 - mkdir app  and inside of it, add the root component:
-  - touch app.component.ts
+  - touch app/app.component.ts
 
 ```
 app/app.component.ts
