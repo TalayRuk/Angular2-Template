@@ -114,12 +114,9 @@ index.html content
 
 ```
 - Run bower init to create the bower manifest file, keeping all the defaults.
-```
-npm install bower -g
-bower init
 
-```
 - touch .gitignore file.
+
 ```
 node_modules/
 npm-debug.log
@@ -131,11 +128,13 @@ build/
 typings/
 
 ```
+
 - mkdir resources folder, including
   - mkdir resources/images
   - mkdir resources/js
-  - mkdir resources/styles/styles.css  to the styles folder with a single obvious style rule to make sure the files are connected up correctly - for example, turn all the <h1> tags blue.
-  ```
+  - mkdir resources/styles/styles.css  to the styles folder with a single obvious style rule to make sure the files are connected up correctly - for example, turn all the h1> tags blue.
+  
+```
   resources/styles/styles.css
   -------------------------------
     h1 {
@@ -143,6 +142,7 @@ typings/
     }
 
 ```
+
 - mkdir app  and inside of it, add the root component:
   - touch app/app.component.ts
 
@@ -165,9 +165,11 @@ export class AppComponent {
 }
 
 ```
+
 - Also in the app folder, add the entry point files:
  - touch app/app.module.ts
  - touch app/main.ts
+ 
 ```
 app/app.module.ts
 ----------------------------------------------------------
@@ -288,6 +290,8 @@ systemjs.config.js
 ### We can still use npm and gulp to manage our development workflow with a server, and we can still use Bower to manage our frontend dependencies. Here is a sample package.json and gulpfile.js to get you started. 
 **There's no need to worry about concatenating and minifying your JavaScript, the TypeScript compiler takes care of that for us, no need for environment variables at this point, and there's no need to browserify anymore..** 
 _But we do want a simple build task to pull in our Bower dependencies and put them into our usual vendor.css and vendor.min.js files. We also want to have a task to compile any SASS we're using, and a basic serve task. We are using the same tasks from last week._
+
+
 ```
 gulpfile.js
 ------------------------------------------------------
@@ -381,15 +385,18 @@ gulp.task('build', ['ts'], function(){
 ## Finally, don't forget to add your <script and link> tags to the index.html file, before your final app.js file. The TypeScript compiler will give you errors about jQuery but it will work just fine in the browser if we install it with Bower and then build with our gulpfile. This will pull jQuery, and any of our other frontend dependencies, into our vendor.css and vendor.min.js files to be used in the browser.
 
 ### index.html
+
 ```
     <link rel="stylesheet" href="build/css/vendor.css">
     <script src="build/js/vendor.min.js"></script>
     <script type="text/javascript" src="build/js/app.js"></script>
 ```
+
 ### Notice that Gulp and the TypeScript compiler can both share the same build folder.
 
 - Install any bower dependencies, such as Bootstrap.
 - Run the 4 development commands.
+
 ```
 Development Commands
 -------------
@@ -400,5 +407,6 @@ Development Commands
 - gulp serve
 
 ```
+
 - Troubleshooting
   - If the above steps have been completed and there are still errors relating to dependencies, try deleting the node_modules and bower_components folders and then rerunning the npm and bower install commands.
