@@ -103,7 +103,7 @@ typings/
 - mkdir resources folder, including
   - mkdir resources/images
   - mkdir resources/js
-  - mkdir resources/css/styles.css  to the styles folder with a single obvious style rule to make sure the files are connected up correctly - for example, turn all the <h1> tags blue.
+  - mkdir resources/styles/styles.css  to the styles folder with a single obvious style rule to make sure the files are connected up correctly - for example, turn all the <h1> tags blue.
   ```
   resources/styles/styles.css
   -------------------------------
